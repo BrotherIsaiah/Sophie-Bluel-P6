@@ -18,25 +18,35 @@ try {
         figureWork.appendChild(imageWork);
         figureWork.appendChild(titleWork);
     })
-    const reponseCategory = await fetch ("http://localhost:5678/api/categories");
-    console.log(reponseCategory);
-    const reponseJSCat = await reponseCategory.json();
-    console.log(reponseJSCat);
-
-    reponseJSCat.forEach(category => {
-        const sectionPortfolio = document.getElementById("portfolio");
-        const objetCategory = document.createElement("input");
-        objetCategory.setAttribute("type", "submit");
-        objetCategory.value = category.name;
-        sectionPortfolio.appendChild(objetCategory);
-        sectionPortfolio.insertBefore(objetCategory, divGallery);
-    })
+    
 }
 catch (error){
     console.log(error, "erreur")
 }
 };
 
+async function getCategory(){
+    try {
+        const reponseCategory = await fetch ("http://localhost:5678/api/categories");
+    console.log(reponseCategory);
+    const reponseJSCat = await reponseCategory.json();
+    console.log(reponseJSCat);
+    const divGallery = document.querySelector(".gallery")
+    reponseJSCat.forEach(category => {
+        const sectionPortfolio = document.getElementById("portfolio");
+        const workCategory = document.createElement("input");
+        workCategory.setAttribute("type", "submit");
+        workCategory.value = category.name;
+        sectionPortfolio.appendChild(workCategory);
+        sectionPortfolio.insertBefore(workCategory, divGallery);
+    });
+    
+    } catch (error) {
+        console.log(error, "erreur");
+    }
+};
+
+getCategory();
 getWork();
 
 
