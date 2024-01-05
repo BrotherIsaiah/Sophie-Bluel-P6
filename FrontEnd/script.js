@@ -31,15 +31,25 @@ async function getCategory(){
     console.log(reponseCategory);
     const reponseJSCat = await reponseCategory.json();
     console.log(reponseJSCat);
-    const divGallery = document.querySelector(".gallery")
-    reponseJSCat.forEach(category => {
+    const divGallery = document.querySelector(".gallery");
+    reponseJSCat.forEach((category) => {
         const sectionPortfolio = document.getElementById("portfolio");
         const workCategory = document.createElement("input");
         workCategory.setAttribute("type", "submit");
+        workCategory.id = "categoryButton"
         workCategory.value = category.name;
         sectionPortfolio.appendChild(workCategory);
         sectionPortfolio.insertBefore(workCategory, divGallery);
     });
+    const filterButton = reponseJSCat[0].name;
+    const objetsButton = document.getElementById("categoryButton");
+    objetsButton.addEventListener("click", function (){
+        console.log(objetsButton);
+        divGallery.innerHTML = ;
+    })
+   
+    
+   
     
     } catch (error) {
         console.log(error, "erreur");
