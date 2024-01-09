@@ -78,6 +78,10 @@ async function getWorkAndCategories () {
     };
     
     getWorkAndCategories();
+
+    const loginForm = document.querySelector("#login form");
+    console.log(loginForm);
+    
     
     
     
