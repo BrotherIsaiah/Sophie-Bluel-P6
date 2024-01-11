@@ -3,9 +3,9 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log(connectButton);
     const loginForm = document.querySelector("#login form");
     console.log(loginForm);
-    const emailValue = "sophie.bluel@test.tld"
+    const emailValue = document.getElementById("email").value;
     console.log(emailValue);
-    const passwordValue = "S0phie"
+    const passwordValue = document.getElementById("pass").value;
     console.log(passwordValue);
     connectButton.addEventListener("click", logIn);
         console.log(connectButton);
@@ -18,11 +18,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 headers: {
                      "accept": "application/json",
                      "Content-Type": "application/json"},
-                body: JSON.stringify({ "email": emailValue, "password": passwordValue})
+                body: JSON.stringify({ "email": "sophie.bluel@test.tld", "password": "S0phie"})
             });
             const reponseData = await reponseLogin.json();
             console.log(reponseData);
-
+            if (reponseLogin.ok) {
+                location = "index.html"
+            } else {
+                const errorAlert = document.createElement("p");
+                errorAlert.textContent = "erreur de connexion";
+                loginForm.appendChild(errorAlert);
+            }
+            
+            
             
         } catch (error) {
             console.log(error, "erreur")
@@ -30,5 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(logIn);
     }
 });
+
+
 
 
