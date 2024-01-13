@@ -3,42 +3,38 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log(connectButton);
     const loginForm = document.querySelector("#login form");
     console.log(loginForm);
-    const emailValue = document.getElementById("email").value;
-    console.log(emailValue);
-    const passwordValue = document.getElementById("pass").value;
-    console.log(passwordValue);
-    connectButton.addEventListener("click", logIn);
-        console.log(connectButton);
-    
-    async function logIn (event){
+    const emailForm = document.getElementById("email").value;
+    console.log(emailForm);
+    const passwordForm = document.getElementById("pass").value;
+    console.log(passwordForm);
+    connectButton.addEventListener("click", async function (event){
         event.preventDefault();
+        await validateForm();
+    });
+    
+    async function validateForm() {
         try {
-            const reponseLogin = await fetch ("http://localhost:5678/api/users/login", {
+            const responseLogin = await fetch("http://localhost:5678/api/users/login", {
                 method: "POST",
                 headers: {
-                     "accept": "application/json",
-                     "Content-Type": "application/json"},
-                body: JSON.stringify({ "email": emailValue, "password": "S0phie"})
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "email": "sophie.bluel@test.tld",  // Remplacez par la valeur réelle de l'e-mail
+                    "password": "S0phie"  // Remplacez par la valeur réelle du mot de passe
+                })
             });
-            const reponseData = await reponseLogin.json();
-            console.log(reponseData);
-            if (reponseLogin.ok) {
-                location = "index.html"
+            const responseData = await responseLogin.json();
+            console.log(responseData);
+            if (responseLogin.ok) {
+                location = "index.html";
             } else {
-                const errorAlert = document.createElement("p");
-                errorAlert.textContent = "erreur de connexion";
-                loginForm.appendChild(errorAlert);
+                console.log("Erreur de connexion");
             }
-            
-            
-            
         } catch (error) {
-            console.log(error, "erreur")
+            console.error("Erreur lors de la requête:", error);
         }
-        console.log(logIn);
     }
+    
 });
-
-
-
-
