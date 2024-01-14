@@ -76,12 +76,6 @@ async function getWorkAndCategories () {
         console.log(error, "erreur")
     }
     };
-    
-    getWorkAndCategories();
 
-    const loginForm = document.querySelector("#login form");
-    console.log(loginForm);
-    
-    
-    
-    
+
+getWorkAndCategories();
