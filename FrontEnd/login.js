@@ -1,12 +1,14 @@
-// login.js
-const connectButton = document.getElementById("connect");
+document.addEventListener("DOMContentLoaded", function(){
+    const connectButton = document.getElementById("connect");
 connectButton.addEventListener("click", async function (event){
     event.preventDefault();
     const emailForm = document.getElementById("email").value;
     const passwordForm = document.getElementById("pass").value;
     await validateForm(emailForm, passwordForm);
 });
-export async function validateForm(email, password) {
+})
+
+async function validateForm(email, password) {
     try {
         const responseLogin = await fetch("http://localhost:5678/api/users/login", {
             method: "POST",
@@ -26,13 +28,22 @@ export async function validateForm(email, password) {
             window.localStorage.setItem("myToken", responseData.token);
         } else {
             console.log("Erreur de connexion");
+            const existingError = document.querySelector("#loginError")
+            if (!existingError){
+                const loginForm = document.querySelector("#login form");
+                const logError = document.createElement("p");
+                logError.textContent = "Erreur dans les identifiants !"
+                logError.id = "loginError";
+                logError.style.color = "red"
+                loginForm.insertBefore(logError, loginForm.firstChild);
+            }
+           
         }
     } catch (error) {
         console.error("Erreur lors de la requête:", error);
     }
-    const storedToken = window.localStorage.getItem("myToken");
 }
 
-export function getToken() {
+function getToken() {
     return window.localStorage.getItem("myToken");
 }
