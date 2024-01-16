@@ -1,3 +1,4 @@
+import { getToken } from "./login.js";
 //Récupérer les travaux
 async function getWorkAndCategories () {
     //console.log("test getWork");
@@ -76,6 +77,23 @@ async function getWorkAndCategories () {
         console.log(error, "erreur")
     }
     };
-
-
 getWorkAndCategories();
+
+function modalEditionAndLogout(){
+    const modalDiv = document.getElementById("modal1");
+    const loginLink = document.querySelector('nav ul li:nth-child(3) a');
+    if (getToken()) {
+        modalDiv.style.display = "flex";
+        loginLink.textContent = "logout"
+    } else {
+        modalDiv.style.display = "none";
+        console.log("erreur");
+    };
+    const modalDiv2 = document.querySelector(".modal2");
+    const editIcon = document.querySelector(".fa-pen-to-square");
+    editIcon.addEventListener("click", function(){
+        modalDiv2.style.display = "flex";
+        
+    })
+};
+modalEditionAndLogout();

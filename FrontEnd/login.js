@@ -1,4 +1,4 @@
-export {getToken};
+
 document.addEventListener("DOMContentLoaded", function(){
     const connectButton = document.getElementById("connect");
 connectButton.addEventListener("click", async function (event){
@@ -45,6 +45,15 @@ async function validateForm(email, password) {
     }
 }
 
-function getToken() {
+export function getToken() {
     return window.localStorage.getItem("myToken");
+
+}
+
+const storedToken = getToken();
+
+if (storedToken) {
+    console.log("Le token est stocké :", storedToken);
+} else {
+    console.log("Aucun token n'est stocké");
 }
