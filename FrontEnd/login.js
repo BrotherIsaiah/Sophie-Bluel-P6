@@ -1,44 +1,50 @@
-document.addEventListener("DOMContentLoaded", function() {
+export {getToken};
+document.addEventListener("DOMContentLoaded", function(){
     const connectButton = document.getElementById("connect");
-    console.log(connectButton);
-    const loginForm = document.querySelector("#login form");
-    console.log(loginForm);
-    const emailValue = document.getElementById("email").value;
-    console.log(emailValue);
-    const passwordValue = document.getElementById("pass").value;
-    console.log(passwordValue);
-    connectButton.addEventListener("click", logIn);
-        console.log(connectButton);
-    
-    async function logIn (event){
-        event.preventDefault();
-        try {
-            const reponseLogin = await fetch ("http://localhost:5678/api/users/login", {
-                method: "POST",
-                headers: {
-                     "accept": "application/json",
-                     "Content-Type": "application/json"},
-                body: JSON.stringify({ "email": emailValue, "password": "S0phie"})
-            });
-            const reponseData = await reponseLogin.json();
-            console.log(reponseData);
-            if (reponseLogin.ok) {
-                location = "index.html"
-            } else {
-                const errorAlert = document.createElement("p");
-                errorAlert.textContent = "erreur de connexion";
-                loginForm.appendChild(errorAlert);
-            }
-            
-            
-            
-        } catch (error) {
-            console.log(error, "erreur")
-        }
-        console.log(logIn);
-    }
+connectButton.addEventListener("click", async function (event){
+    event.preventDefault();
+    const emailForm = document.getElementById("email").value;
+    const passwordForm = document.getElementById("pass").value;
+    await validateForm(emailForm, passwordForm);
 });
+})
 
+async function validateForm(email, password) {
+    try {
+        const responseLogin = await fetch("http://localhost:5678/api/users/login", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "email": email,
+                "password": password
+            })
+        });
+        if (responseLogin.ok) {
+            const responseData = await responseLogin.json();
+            console.log(responseData);
+            location = "index.html";
+            window.localStorage.setItem("myToken", responseData.token);
+        } else {
+            console.log("Erreur de connexion");
+            const existingError = document.querySelector("#loginError")
+            if (!existingError){
+                const loginForm = document.querySelector("#login form");
+                const logError = document.createElement("p");
+                logError.textContent = "Erreur dans les identifiants !"
+                logError.id = "loginError";
+                logError.style.color = "red"
+                loginForm.insertBefore(logError, loginForm.firstChild);
+            }
+           
+        }
+    } catch (error) {
+        console.error("Erreur lors de la requête:", error);
+    }
+}
 
-
-
+function getToken() {
+    return window.localStorage.getItem("myToken");
+}
