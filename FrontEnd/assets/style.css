@@ -203,6 +203,29 @@ z-index: 100;
   justify-content: center;
   height: 100vh;
   background-color: blanchedalmond;
+  width: fit-content;
+  height: fit-content;
+}
+
+.modalGallery{
+	display: grid;
+	grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+}
+
+.modalGallery img{
+	width: 40%
+}
+
+figure button{
+position: absolute;
+background-color: black;
+border: none;
+
+}
+
+.fa-trash-can{
+	background-color: black;
+	color: white;
 }
 
 /*login form style*/

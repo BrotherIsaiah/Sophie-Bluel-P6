@@ -90,10 +90,45 @@ function modalEditionAndLogout(){
         console.log("erreur");
     };
     const modalDiv2 = document.querySelector(".modal2");
+    const modalGallery = document.querySelector(".modalGallery");
     const editIcon = document.querySelector(".fa-pen-to-square");
     editIcon.addEventListener("click", function(){
-        modalDiv2.style.display = "flex";
+        modalDiv2.style.display = "grid";
         
-    })
+    });
 };
 modalEditionAndLogout();
+
+async function fetchModal (){
+    try {
+        const reponseJSON = await fetch ("http://localhost:5678/api/works");
+        const reponseJS = await reponseJSON.json();
+        const modalDiv2 = document.querySelector(".modal2");
+        const modalGallery = document.querySelector(".modalGallery");
+        reponseJS.forEach(work => {
+            const figureWork = document.createElement("figure")
+            const imageWork = document.createElement("img");
+            imageWork.src = work.imageUrl;
+            modalDiv2.appendChild(modalGallery);
+            modalGallery.appendChild(figureWork);
+            modalGallery.style.display = "grid";
+            figureWork.style.display = "grid";
+           figureWork.appendChild(imageWork);
+           const trashButton = document.createElement("button");
+           trashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>'
+           figureWork.appendChild(trashButton);
+           trashButton.addEventListener("click", function(){
+            
+           })
+        });
+        const addPhotoButton = document.createElement("input");
+        addPhotoButton.setAttribute("type", "submit");
+        addPhotoButton.value = "Ajouter photo";
+        modalDiv2.appendChild(addPhotoButton);
+        
+    } catch (error) {
+        console.log(error, "erreur pour la modale")
+    }
+};
+
+fetchModal();
