@@ -98,6 +98,29 @@ function modalEditionAndLogout(){
     });
 };
 modalEditionAndLogout();
+async function deleteWork(work){
+    try {
+        const token = getToken(); // Assurez-vous d'avoir une fonction getToken qui renvoie votre jeton
+        if (!token) {
+            throw new Error("Token d'authentification manquant");
+        }
+        const deleteWorkById = await fetch (`http://localhost:5678/api/works/${work.id}`,{
+            method: "DELETE",
+headers: {
+    "Accept": "*/*",
+    "Authorization": `Bearer ${token}`, // Ajoutez votre jeton ici
+},
+        });
+        if (deleteWorkById.ok){
+            console.log("Travail supprimé");
+            await fetchModal();
+        } else {
+            console.log ("Erreur lors de la suppression");
+        }
+    } catch (error) {
+        console.log(error, "Impossible de supprimer")
+    }
+}
 
 async function fetchModal (){
     try {
@@ -116,10 +139,11 @@ async function fetchModal (){
            figureWork.appendChild(imageWork);
            const trashButton = document.createElement("button");
            trashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>'
-           figureWork.appendChild(trashButton);
-           trashButton.addEventListener("click", function(){
-            
+           
+           trashButton.addEventListener("click", async function(){
+            await deleteWork(work);
            })
+           figureWork.appendChild(trashButton);
         });
         const addPhotoButton = document.createElement("input");
         addPhotoButton.setAttribute("type", "submit");
