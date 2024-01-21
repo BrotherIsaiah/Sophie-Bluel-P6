@@ -207,6 +207,18 @@ z-index: 100;
   height: fit-content;
 }
 
+.modal3 {
+	z-index: 100;
+	  position: absolute;
+	  width: 40%;
+	  display: none;
+	  margin-inline: 100vh;
+	  justify-content: center;
+	  height: 100vh;
+	  background-color:cadetblue;
+	  
+	}
+
 .modalGallery{
 	display: grid;
 	grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;

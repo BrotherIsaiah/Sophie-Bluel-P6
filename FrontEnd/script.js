@@ -149,6 +149,10 @@ async function fetchModal (){
         addPhotoButton.setAttribute("type", "submit");
         addPhotoButton.value = "Ajouter photo";
         modalDiv2.appendChild(addPhotoButton);
+        addPhotoButton.addEventListener("click", async function () {
+            
+        });
+        
         
     } catch (error) {
         console.log(error, "erreur pour la modale")
