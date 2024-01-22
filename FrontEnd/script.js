@@ -153,46 +153,52 @@ async function fetchModal (){
             modalDiv2.style.display = "none";
             const modalDiv3 = document.querySelector(".modal3");
             modalDiv3.style.display = "flex";
+
+            const formWork = document.createElement("form");
         
             const imageFileInput = document.createElement("input");
             imageFileInput.type = "file";  // Pour les fichiers
-        
+
             const titleInput = document.createElement("input");
             titleInput.type = "text";
-        
+            titleInput.value = "Titre";
+
             const categoryInput = document.createElement("input");
             categoryInput.type = "text";
-        
-            const formWork = document.createElement("form");
-            const formData = new FormData(formWork);
-            formData.append("image", imageFileInput.files[0]);  // Utilisez .files[0] pour obtenir le fichier à partir de l'input
-            formData.append("title", titleInput.value);
-            formData.append("category", categoryInput.value);
-        
-            try {
-                const storedToken = getToken();
-                const reponseJSON = await fetch("http://localhost:5678/api/works", {
+            categoryInput.value = "Catégorie";
+
+            const submitButton = document.createElement("button");
+            submitButton.type = "submit";
+            submitButton.textContent = "Valider";
+
+            modalDiv3.appendChild(formWork);
+            formWork.appendChild(imageFileInput);
+            formWork.appendChild(titleInput);
+            formWork.appendChild(categoryInput);
+            formWork.appendChild(submitButton);
+
+            formWork.addEventListener("submit", async function (event){
+               event.preventDefault();
+               const formData = new FormData(formWork);
+               try {
+                const response = await fetch("http://localhost:5678/api/works",{
                     method: "POST",
                     headers: {
                         "Accept": "application/json",
-                        "Authorization": `Bearer ${storedToken}`,  // Ajoutez le token ici
                     },
                     body: formData,
                 });
-        
-                if (reponseJSON.ok) {
-                    const responseData = await reponseJSON.json();
+                if (response.ok){
+                    const responseData = await response.json();
                     console.log("Travail créé", responseData);
-                    // Ajoutez ici le code pour traiter la réponse, si nécessaire
                 } else {
                     console.error("Erreur lors de la création");
-                    // Ajoutez ici le code pour gérer les erreurs, si nécessaire
                 }
-            } catch (error) {
-                console.error("Erreur pendant la requête", error);
-            }
-        
-            modalDiv3.appendChild(formWork);
+               } catch (error) {
+                console.error("Erreur pendantla requete:", error);
+               } 
+            })
+           
         });
         
         
