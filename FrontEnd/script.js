@@ -96,6 +96,18 @@ function modalEditionAndLogout(){
         modalDiv2.style.display = "grid";
         
     });
+    const xCloseModal = document.querySelector(".fa-xmark");
+    xCloseModal.addEventListener("click", function(){
+        modalDiv2.style.display ="none";
+    });
+    if (loginLink.textContent === "logout") {
+        loginLink.addEventListener("click", function(){
+            window.localStorage.removeItem("myToken");
+            window.location.reload();
+            loginLink.textContent = "login";
+            window.location.href = "index.html";
+        });
+    };
 };
 modalEditionAndLogout();
 async function deleteWork(work){
@@ -167,7 +179,7 @@ async function fetchModal (){
             categoryInput.type = "text";
             categoryInput.value = "Catégorie";
 
-            const submitButton = document.createElement("button");
+            const submitButton = document.createElement("input");
             submitButton.type = "submit";
             submitButton.textContent = "Valider";
 
@@ -208,3 +220,4 @@ async function fetchModal (){
 };
 
 fetchModal();
+//Essaye de reprendre la requete et la methode forEach du début pour implémenter le formulaire pour la modal
