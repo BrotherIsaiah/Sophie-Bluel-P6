@@ -192,19 +192,31 @@ async function fetchModal (){
             formWork.addEventListener("submit", async function (event){
                event.preventDefault();
                const formData = new FormData(formWork);
+               const token = await getToken();
+               console.log(token, "tokeeeen")
+
+               const fakeData = new FormData();
+               console.log(imageFileInput.value,categoryInput.value,titleInput.value)
+               fakeData.append('title',titleInput   .value);
+               fakeData.append('image',imageFileInput.value);
+               fakeData.append("category",parseInt(categoryInput.value));
+
+               console.log(fakeData,"fakeData")
+
                try {
                 const response = await fetch("http://localhost:5678/api/works",{
                     method: "POST",
                     headers: {
-                        "Accept": "application/json",
+                        'Authorization': `Bearer ${token}`
                     },
-                    body: formData,
+                    // body: formData,
+                    body:fakeData
                 });
                 if (response.ok){
                     const responseData = await response.json();
                     console.log("Travail créé", responseData);
                 } else {
-                    console.error("Erreur lors de la création");
+                    console.error("Erreur lors de la création",console.log(await response.json()));
                 }
                } catch (error) {
                 console.error("Erreur pendantla requete:", error);
