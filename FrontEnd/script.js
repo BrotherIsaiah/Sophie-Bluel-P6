@@ -112,7 +112,7 @@ function modalEditionAndLogout(){
 modalEditionAndLogout();
 async function deleteWork(work){
     try {
-        const token = getToken(); // Assurez-vous d'avoir une fonction getToken qui renvoie votre jeton
+        const token = getToken(); 
         if (!token) {
             throw new Error("Token d'authentification manquant");
         }
@@ -120,7 +120,7 @@ async function deleteWork(work){
             method: "DELETE",
 headers: {
     "Accept": "*/*",
-    "Authorization": `Bearer ${token}`, // Ajoutez votre jeton ici
+    "Authorization": `Bearer ${token}`, 
 },
         });
         if (deleteWorkById.ok){
@@ -158,78 +158,94 @@ async function fetchModal (){
            figureWork.appendChild(trashButton);
         });
         const addPhotoButton = document.createElement("input");
-        addPhotoButton.setAttribute("type", "submit");
+        addPhotoButton.setAttribute("type", "button");
         addPhotoButton.value = "Ajouter photo";
+        addPhotoButton.classList.add("add-photo-button");
         modalDiv2.appendChild(addPhotoButton);
-        addPhotoButton.addEventListener("click", async function () {
-            modalDiv2.style.display = "none";
-            const modalDiv3 = document.querySelector(".modal3");
-            modalDiv3.style.display = "flex";
-
-            const formWork = document.createElement("form");
-        
-            const imageFileInput = document.createElement("input");
-            imageFileInput.type = "file";  // Pour les fichiers
-
-            const titleInput = document.createElement("input");
-            titleInput.type = "text";
-            titleInput.value = "Titre";
-
-            const categoryInput = document.createElement("input");
-            categoryInput.type = "text";
-            categoryInput.value = "Catégorie";
-
-            const submitButton = document.createElement("input");
-            submitButton.type = "submit";
-            submitButton.textContent = "Valider";
-
-            modalDiv3.appendChild(formWork);
-            formWork.appendChild(imageFileInput);
-            formWork.appendChild(titleInput);
-            formWork.appendChild(categoryInput);
-            formWork.appendChild(submitButton);
-
-            formWork.addEventListener("submit", async function (event){
-               event.preventDefault();
-               const formData = new FormData(formWork);
-               const token = await getToken();
-               console.log(token, "tokeeeen")
-
-               const fakeData = new FormData();
-               console.log(imageFileInput.value,categoryInput.value,titleInput.value)
-               fakeData.append('title',titleInput   .value);
-               fakeData.append('image',imageFileInput.value);
-               fakeData.append("category",parseInt(categoryInput.value));
-
-               console.log(fakeData,"fakeData")
-
-               try {
-                const response = await fetch("http://localhost:5678/api/works",{
-                    method: "POST",
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    // body: formData,
-                    body:fakeData
-                });
-                if (response.ok){
-                    const responseData = await response.json();
-                    console.log("Travail créé", responseData);
-                } else {
-                    console.error("Erreur lors de la création",console.log(await response.json()));
-                }
-               } catch (error) {
-                console.error("Erreur pendantla requete:", error);
-               } 
-            })
-           
-        });
-        
-        
     } catch (error) {
         console.log(error, "erreur pour la modale")
     }
 };
 
+async function addWorkModal() {
+    const modalDiv2 = document.querySelector(".modal2");
+
+    document.addEventListener("click", async function (event) {
+        if (event.target.classList.contains("add-photo-button")) {
+            modalDiv2.style.display = "none";
+            const modalDiv3 = document.querySelector(".modal3");
+            modalDiv3.style.display = "flex";
+
+            const formWork = document.createElement("form");
+
+            const imageFileInput = document.createElement("input");
+            imageFileInput.type = "file"; // Pour les fichiers
+
+            const titleInput = document.createElement("input");
+            titleInput.type = "text";
+            titleInput.value = "Abajour Tahina";
+
+            const categoryInput = document.createElement("input");
+            categoryInput.type = "text";
+            categoryInput.value = "Objets";
+
+            const submitButton = document.createElement("input");
+            submitButton.type = "submit";
+            submitButton.textContent = "Valider";
+
+            const requestBody = new FormData();
+                requestBody.append('image', imageFileInput.files[0]);
+                requestBody.append('title', titleInput.value);
+                requestBody.append('category', categoryInput.value);
+                console.log(requestBody);
+
+            formWork.appendChild(imageFileInput);
+            formWork.appendChild(titleInput);
+            formWork.appendChild(categoryInput);
+            formWork.appendChild(submitButton);
+
+            //var object = {};
+            //formData.forEach(function(value, key){
+                //object[key] = value;
+            //}); a tester
+            //var json = JSON.stringify(object);
+            async function fetchWorks (){
+                
+                const token = await getToken();
+                try {
+                    const response = await fetch("http://localhost:5678/api/works", {
+                        method: "POST",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestBody),
+                    });
+                    console.log(response);
+                    if (response.ok){
+                        const responseData = await response.json();
+                        console.log("Travail créé", responseData);
+                    } else{
+                        console.error("Erreur lors de la création", await response.json());
+                    }
+                } catch (error) {
+                    console.error("Erreur de requête", error);
+                }
+                
+            };
+
+            formWork.addEventListener("submit", async function (event) {
+                event.preventDefault();
+                await fetchWorks();
+            });
+
+            modalDiv3.appendChild(formWork);
+        }
+    });
+    
+        
+    };
+
 fetchModal();
-//Essaye de reprendre la requete et la methode forEach du début pour implémenter le formulaire pour la modal
+addWorkModal();
