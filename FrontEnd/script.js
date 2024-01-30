@@ -179,7 +179,8 @@ async function addWorkModal() {
             const formWork = document.createElement("form");
 
             const imageFileInput = document.createElement("input");
-            imageFileInput.type = "file"; // Pour les fichiers
+            imageFileInput.type = "file"; 
+
 
             const titleInput = document.createElement("input");
             titleInput.type = "text";
@@ -204,40 +205,40 @@ async function addWorkModal() {
             formWork.appendChild(categoryInput);
             formWork.appendChild(submitButton);
 
-            //var object = {};
-            //formData.forEach(function(value, key){
-                //object[key] = value;
-            //}); a tester
-            //var json = JSON.stringify(object);
-            async function fetchWorks (){
-                
-                const token = await getToken();
+            async function createWork(work){
                 try {
-                    const response = await fetch("http://localhost:5678/api/works", {
+                    const token = await getToken(); 
+                    if (!token) {
+                        throw new Error("Token d'authentification manquant");
+                    };
+
+                    const requestBody = new FormData();
+                    requestBody.append('image', imageFileInput.files[0]);
+                    requestBody.append('title', titleInput.value);
+                    requestBody.append('category', categoryInput.value);
+
+                    const createWorkBySubmit = await fetch ("http://localhost:5678/api/works",{
                         method: "POST",
-                        headers: {
-                            'Accept': 'application/json',
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(requestBody),
+            headers: {
+                "Accept": "application/json",
+                "Authorization": `Bearer ${localStorage.token}`, 
+            },
+            body: requestBody
                     });
-                    console.log(response);
-                    if (response.ok){
-                        const responseData = await response.json();
-                        console.log("Travail créé", responseData);
-                    } else{
-                        console.error("Erreur lors de la création", await response.json());
+                    if (createWorkBySubmit.ok){
+                        console.log("Travail crée");
+                        await fetchModal();
+                    } else {
+                        console.log ("Erreur lors de la création");
                     }
                 } catch (error) {
-                    console.error("Erreur de requête", error);
+                    console.log(error, "Impossible de créer")
                 }
-                
-            };
+            }
 
             formWork.addEventListener("submit", async function (event) {
                 event.preventDefault();
-                await fetchWorks();
+                await createWork();
             });
 
             modalDiv3.appendChild(formWork);
