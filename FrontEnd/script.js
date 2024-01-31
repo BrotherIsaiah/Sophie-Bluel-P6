@@ -221,7 +221,8 @@ async function addWorkModal() {
                         method: "POST",
             headers: {
                 "Accept": "application/json",
-                "Authorization": `Bearer ${localStorage.token}`, 
+                "Authorization": `Bearer ${localStorage.getItem('getToken')}`, 
+                'Content-Type': 'multipart/form-data'
             },
             body: requestBody
                     });
