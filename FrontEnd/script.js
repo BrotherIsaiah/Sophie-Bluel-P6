@@ -217,15 +217,17 @@ async function addWorkModal() {
                     requestBody.append('title', titleInput.value);
                     requestBody.append('category', categoryInput.value);
 
-                    const createWorkBySubmit = await fetch ("http://localhost:5678/api/works",{
+                    const createWorkBySubmit = await fetch("http://localhost:5678/api/works", {
                         method: "POST",
-            headers: {
-                "Accept": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem('getToken')}`, 
-                'Content-Type': 'multipart/form-data'
-            },
-            body: requestBody
+                        headers: {
+
+                            "Authorization": `Bearer ${token}`,
+
+                        },
+                        body: requestBody
                     });
+            
+                    
                     if (createWorkBySubmit.ok){
                         console.log("Travail crée");
                         await fetchModal();
