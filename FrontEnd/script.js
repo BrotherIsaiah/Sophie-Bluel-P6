@@ -175,11 +175,30 @@ async function addWorkModal() {
             modalDiv2.style.display = "none";
             const modalDiv3 = document.querySelector(".modal3");
             modalDiv3.style.display = "flex";
+            modalDiv3.style.flexDirection = "column";
+            
+
+            const navModal3 = document.createElement("nav");
+            navModal3.innerHTML = '<i class="fa-solid fa-arrow-left"></i><i class="fa-solid fa-xmark"></i>';
+            modalDiv3.insertBefore(navModal3, modalDiv3.firstChild);
 
             const formWork = document.createElement("form");
 
+            const divImageInput = document.createElement("div");
+            divImageInput.classList.add = "image-input";
+
+             
+
+            const fileInputLabel = document.createElement("label");
+            fileInputLabel.textContent = "Ajouter une photo";
+            fileInputLabel.htmlFor = "fileInput";
+
             const imageFileInput = document.createElement("input");
             imageFileInput.type = "file"; 
+            imageFileInput.id = "fileInput";
+            imageFileInput.accept = "jpg, png : 4mo max";
+            imageFileInput.style.opacity = "0";
+            
 
 
             const titleInput = document.createElement("input");
@@ -200,11 +219,14 @@ async function addWorkModal() {
                 requestBody.append('category', categoryInput.value);
                 console.log(requestBody);
 
-            formWork.appendChild(imageFileInput);
+                formWork.appendChild(divImageInput);
+            divImageInput.append(fileInputLabel);
+            divImageInput.append(imageFileInput);
+            
             formWork.appendChild(titleInput);
             formWork.appendChild(categoryInput);
             formWork.appendChild(submitButton);
-
+            
             async function createWork(work){
                 try {
                     const token = await getToken(); 
@@ -245,6 +267,8 @@ async function addWorkModal() {
             });
 
             modalDiv3.appendChild(formWork);
+            modalDiv3.appendChild(navModal3);
+            
         }
     });
     
