@@ -219,6 +219,7 @@ margin: auto;
 	height: fit-content;
 	margin-block: 5%;
 	padding: 2%;
+	flex-direction: column;
 }
 .modal2 p {
 	font-size: x-large;
@@ -261,6 +262,11 @@ margin: auto;
 	  flex-direction: column;
 	  top: 30%;
 	}
+	.modal3 h3{
+		font-size: x-large;
+  text-align: center;
+  margin-block-end: 2em;
+	}
 	.modal3 form {
 		display: flex;
   flex-direction: column;
@@ -275,10 +281,21 @@ margin: auto;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
   width: 60%;
 	}
+	.modal3 select {
+		height: 50px;
+  font-size: 1.2em;
+  border: none;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  width: 60%;
+	}
 	.modal3 input[type="file"]{
 		display: none;
 	}
-	
+	.modal3 nav{
+		display: flex;
+		justify-content: space-between;
+		padding: 1em;
+	}
 	.modal3 .fa-xmark{
 		display: flex;
 		justify-content: end;
@@ -289,15 +306,20 @@ margin: auto;
 		justify-content: start;
 		font-size: x-large;
 	}
+	.modal3 .fa-image{
+		color: #B9C5CC;
+		font-size: 6rem;
+	}
 .modal3 div{
 	display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   justify-content: center;
-  width: 50%;
   width: 60%;
-  height: 10em;
+  height: fit-content;
   background-color: #E8F1F6;
   align-items: center;
+  gap: 1em;
+  padding: 1em;
 }
 .modal3 label{
 	border-radius: 50px;

@@ -175,19 +175,39 @@ async function addWorkModal() {
             modalDiv2.style.display = "none";
             const modalDiv3 = document.querySelector(".modal3");
             modalDiv3.style.display = "flex";
-            modalDiv3.style.flexDirection = "column";
+            
             
 
             const navModal3 = document.createElement("nav");
             navModal3.innerHTML = '<i class="fa-solid fa-arrow-left"></i><i class="fa-solid fa-xmark"></i>';
-            modalDiv3.insertBefore(navModal3, modalDiv3.firstChild);
+            
+            // Utilisation de délégués d'événements pour le bouton de fermeture
+            document.addEventListener("click", function (event) {
+            if (event.target.classList.contains("fa-xmark")) {
+            modalDiv3.style.display = "none";
+            }
+            });
+
+            // Utilisation de délégués d'événements pour le bouton précédent
+            document.addEventListener("click", function (event) {
+            if (event.target.classList.contains("fa-arrow-left")) {
+            modalDiv3.style.display = "none";
+            modalDiv2.style.display = "flex";
+            }
+            });
+
+            const titleModal3 = document.createElement("h3");
+            titleModal3.textContent = "Ajout photo";
+            
 
             const formWork = document.createElement("form");
 
             const divImageInput = document.createElement("div");
             divImageInput.classList.add = "image-input";
 
-             
+            const imageIcon = document.createElement("span");
+            imageIcon.innerHTML = '<i class="fa-regular fa-image"></i>';
+            
 
             const fileInputLabel = document.createElement("label");
             fileInputLabel.textContent = "Ajouter une photo";
@@ -196,22 +216,52 @@ async function addWorkModal() {
             const imageFileInput = document.createElement("input");
             imageFileInput.type = "file"; 
             imageFileInput.id = "fileInput";
-            imageFileInput.accept = "jpg, png : 4mo max";
+            imageFileInput.accept = "jpg, png";
             imageFileInput.style.opacity = "0";
             
+            const previewImage = document.createElement("img");
+            previewImage.style.maxWidth = "100%";
+            previewImage.style.maxHeight = "150px";
 
-
+            imageFileInput.addEventListener("change", () => {
+                const file = imageFileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    imageFileInput.style.flexDirection = "column-reverse";
+                    imageIcon.style.display = 'none';
+                    submitButton.style.backgroundColor = "#1D6154";
+                    reader.onload = (e) => {
+                        previewImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewImage.src = ""; 
+                }
+            });
+            
             const titleInput = document.createElement("input");
             titleInput.type = "text";
-            titleInput.value = "Abajour Tahina";
-
-            const categoryInput = document.createElement("input");
-            categoryInput.type = "text";
-            categoryInput.value = "Objets";
+            titleInput.value = "";
+            
+            const reponseCategory = await fetch ("http://localhost:5678/api/categories");
+            console.log(reponseCategory);
+            const reponseJSCat = await reponseCategory.json();
+            console.log(reponseJSCat);
+            const categoryInput = document.createElement("select");
+            
+            reponseJSCat.forEach((category) => {
+                const option = document.createElement("option");
+                option.value = category.id;
+                option.textContent = category.name;
+                categoryInput.appendChild(option);
+                });
+            
+            
 
             const submitButton = document.createElement("input");
             submitButton.type = "submit";
-            submitButton.textContent = "Valider";
+            submitButton.value = "Valider";
+            submitButton.style.backgroundColor = "#A7A7A7";
 
             const requestBody = new FormData();
                 requestBody.append('image', imageFileInput.files[0]);
@@ -222,6 +272,8 @@ async function addWorkModal() {
                 formWork.appendChild(divImageInput);
             divImageInput.append(fileInputLabel);
             divImageInput.append(imageFileInput);
+            divImageInput.appendChild(previewImage);
+            divImageInput.appendChild(imageIcon);
             
             formWork.appendChild(titleInput);
             formWork.appendChild(categoryInput);
@@ -265,10 +317,9 @@ async function addWorkModal() {
                 event.preventDefault();
                 await createWork();
             });
-
-            modalDiv3.appendChild(formWork);
             modalDiv3.appendChild(navModal3);
-            
+            modalDiv3.appendChild(titleModal3);
+            modalDiv3.appendChild(formWork);
         }
     });
     
