@@ -31,7 +31,6 @@ async function getWorkAndCategories () {
             workCategory.value = category.name;
             sectionPortfolio.appendChild(workCategory);
             sectionPortfolio.insertBefore(workCategory, divGallery);
-    
             workCategory.addEventListener("click", function(){
                 // Récupération de l'id de la catégorie
                 const categoryId = category.id;
@@ -52,6 +51,7 @@ async function getWorkAndCategories () {
                 })
             })
         });
+        
         //bouton pour afficher tout les travaux
         const resetFilter = document.createElement("input");
         const sectionPortfolio = document.getElementById("portfolio");
@@ -82,9 +82,19 @@ getWorkAndCategories();
 function modalEditionAndLogout(){
     const modalDiv = document.getElementById("modal1");
     const loginLink = document.querySelector('nav ul li:nth-child(3) a');
+    //const sectionPortfolio = document.getElementById("portfolio");
+    //console.log(sectionPortfolio);
+    
+    const inputElements = document.querySelectorAll("#portfolio input");
+    
     if (getToken()) {
         modalDiv.style.display = "flex";
-        loginLink.textContent = "logout"
+        loginLink.textContent = "logout";
+        
+        inputElements.forEach((input) => {
+            input.style.display = "none";
+        });
+        
     } else {
         modalDiv.style.display = "none";
         console.log("erreur");
@@ -110,6 +120,7 @@ function modalEditionAndLogout(){
     };
 };
 modalEditionAndLogout();
+
 async function deleteWork(work){
     try {
         const token = getToken(); 
