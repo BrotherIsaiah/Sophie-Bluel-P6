@@ -82,10 +82,11 @@ getWorkAndCategories();
 function modalEditionAndLogout(){
     const modalDiv = document.getElementById("modal1");
     const loginLink = document.querySelector('nav ul li:nth-child(3) a');
-    //const sectionPortfolio = document.getElementById("portfolio");
-    //console.log(sectionPortfolio);
+    const sectionPortfolio = document.getElementById("portfolio");
+    console.log(sectionPortfolio);
     
     const inputElements = document.querySelectorAll("#portfolio input");
+    
     
     if (getToken()) {
         modalDiv.style.display = "flex";
@@ -97,7 +98,13 @@ function modalEditionAndLogout(){
         
     } else {
         modalDiv.style.display = "none";
-        console.log("erreur");
+        //console.log("erreur");
+    };
+    if (loginLink.textContent === "login") {
+        loginLink.addEventListener("click", function(){
+            
+            window.location.href = "login.html";
+        })
     };
     const modalDiv2 = document.querySelector(".modal2");
     const modalGallery = document.querySelector(".modalGallery");
@@ -136,7 +143,8 @@ headers: {
         });
         if (deleteWorkById.ok){
             console.log("Travail supprimé");
-            await fetchModal();
+            //await fetchModal();
+            window.location.reload();
         } else {
             console.log ("Erreur lors de la suppression");
         }
@@ -316,6 +324,7 @@ async function addWorkModal() {
                     if (createWorkBySubmit.ok){
                         console.log("Travail crée");
                         await fetchModal();
+                        window.location.reload();
                     } else {
                         console.log ("Erreur lors de la création");
                     }
