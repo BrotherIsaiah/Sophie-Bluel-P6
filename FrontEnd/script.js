@@ -1,5 +1,6 @@
 import { getToken } from "./login.js";
 //Récupérer les travaux
+const divCategory = document.createElement("div");
 async function getWorkAndCategories () {
     //console.log("test getWork");
     try {
@@ -22,15 +23,22 @@ async function getWorkAndCategories () {
             figureWork.appendChild(imageWork);
             figureWork.appendChild(titleWork);
         });
-    
+        const sectionPortfolio = document.getElementById("portfolio");
+        //const divCategory = document.createElement("div");
+        divCategory.classList.add = "divCategory";
+        sectionPortfolio.appendChild(divCategory);
+
         reponseJSCat.forEach((category, index) => {
-            const sectionPortfolio = document.getElementById("portfolio");
+            
             const workCategory = document.createElement("input");
             workCategory.setAttribute("type", "submit");
             workCategory.id = `categoryButton_${index}`
             workCategory.value = category.name;
+            sectionPortfolio.appendChild(divCategory);
             sectionPortfolio.appendChild(workCategory);
-            sectionPortfolio.insertBefore(workCategory, divGallery);
+            
+            divCategory.appendChild(workCategory);
+            sectionPortfolio.insertBefore(divCategory, divGallery);
             workCategory.addEventListener("click", function(){
                 // Récupération de l'id de la catégorie
                 const categoryId = category.id;
@@ -54,11 +62,11 @@ async function getWorkAndCategories () {
         
         //bouton pour afficher tout les travaux
         const resetFilter = document.createElement("input");
-        const sectionPortfolio = document.getElementById("portfolio");
+        
         resetFilter.setAttribute("type", "submit");
         resetFilter.value = "Tous";
-        sectionPortfolio.appendChild(resetFilter);
-        sectionPortfolio.insertBefore(resetFilter, divGallery);
+        divCategory.appendChild(resetFilter);
+        //sectionPortfolio.insertBefore(resetFilter, divGallery);
         resetFilter.addEventListener("click", function(){
             divGallery.innerHTML = "";
             reponseJS.forEach(work => {
@@ -75,7 +83,7 @@ async function getWorkAndCategories () {
     }
     catch (error){
         console.log(error, "erreur")
-    }
+    };
     };
 getWorkAndCategories();
 
@@ -84,18 +92,18 @@ function modalEditionAndLogout(){
     const loginLink = document.querySelector('nav ul li:nth-child(3) a');
     const sectionPortfolio = document.getElementById("portfolio");
     console.log(sectionPortfolio);
-    
-    const inputElements = document.querySelectorAll("#portfolio input");
-    
-    
+    const divModifier = document.querySelector(".div-modifier");
+    const icon = divModifier.querySelector("i");
+    const paragraph = divModifier.querySelector("p");
+    icon.style.display = "none";
+    paragraph.style.display = "none";
+   
     if (getToken()) {
         modalDiv.style.display = "flex";
         loginLink.textContent = "logout";
-        
-        inputElements.forEach((input) => {
-            input.style.display = "none";
-        });
-        
+        divCategory.style.display = "none";
+        icon.style.display = "flex";
+        paragraph.style.display = "flex";
     } else {
         modalDiv.style.display = "none";
         //console.log("erreur");
@@ -108,8 +116,8 @@ function modalEditionAndLogout(){
     };
     const modalDiv2 = document.querySelector(".modal2");
     const modalGallery = document.querySelector(".modalGallery");
-    const editIcon = document.querySelector(".fa-pen-to-square");
-    editIcon.addEventListener("click", function(){
+    //const editIcon = document.querySelector(".fa-pen-to-square");
+    icon.addEventListener("click", function(){
         modalDiv2.style.display = "grid";
         
     });
@@ -261,6 +269,9 @@ async function addWorkModal() {
             const titleInput = document.createElement("input");
             titleInput.type = "text";
             titleInput.value = "";
+
+            const titleText = document.createElement("p");
+            titleText.textContent = "Titre";
             
             const reponseCategory = await fetch ("http://localhost:5678/api/categories");
             console.log(reponseCategory);
@@ -275,7 +286,8 @@ async function addWorkModal() {
                 categoryInput.appendChild(option);
                 });
             
-            
+            const categoryText = document.createElement("p");
+            categoryText.textContent = "Catégories";
 
             const submitButton = document.createElement("input");
             submitButton.type = "submit";
@@ -294,7 +306,9 @@ async function addWorkModal() {
             divImageInput.appendChild(previewImage);
             divImageInput.appendChild(imageIcon);
             
+            formWork.appendChild(titleText);
             formWork.appendChild(titleInput);
+            formWork.appendChild(categoryText);
             formWork.appendChild(categoryInput);
             formWork.appendChild(submitButton);
             

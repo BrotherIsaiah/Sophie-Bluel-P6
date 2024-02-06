@@ -134,6 +134,12 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+.div-modifier{
+	display: flex;
+  justify-content: center;
+  gap: 1em;
+  align-items: baseline;
+}
 
 #portfolio input {
 	display: inline-flex;
@@ -148,6 +154,11 @@ li:hover {
 #portfolio input[value="Tous"] {
     color: white;
     background-color: #1D6154;
+}
+.divCategory{
+	display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
 }
 .gallery {
 	width: 100%;
@@ -256,7 +267,7 @@ margin: auto;
 	  position: absolute;
 	  width: 40%;
 	  display: none;
-	  margin-inline: 20%;
+	  margin-inline: 28%;
 	  justify-content: center;
 	  height: fit-content;
 	  background-color:cadetblue;
@@ -274,6 +285,10 @@ margin: auto;
   justify-content: space-evenly;
   gap: 3em;
   align-items: center;
+	}
+	.modal3 form p{
+		margin-block-end: -7%;
+		width: 60%;
 	}
 	.modal3 input {
 		height: 50px;
