@@ -1,6 +1,9 @@
 import { getToken } from "./login.js";
 //Récupérer les travaux
 const divCategory = document.createElement("div");
+const headerSection = document.querySelector("header");
+const sectionIntroduction = document.getElementById("introduction");
+const sectionPortfolio = document.getElementById("portfolio");
 async function getWorkAndCategories () {
     //console.log("test getWork");
     try {
@@ -119,11 +122,17 @@ function modalEditionAndLogout(){
     //const editIcon = document.querySelector(".fa-pen-to-square");
     icon.addEventListener("click", function(){
         modalDiv2.style.display = "grid";
-        
+        headerSection.style.filter = "blur(2px)";
+        sectionIntroduction.style.filter = "blur(2px)";
+        sectionPortfolio.style.filter = "blur(2px)";
+
     });
     const xCloseModal = document.querySelector(".fa-xmark");
     xCloseModal.addEventListener("click", function(){
         modalDiv2.style.display ="none";
+        headerSection.style.filter = "blur(0)";
+        sectionIntroduction.style.filter = "blur(0)";
+        sectionPortfolio.style.filter = "blur(0)";
     });
     if (loginLink.textContent === "logout") {
         loginLink.addEventListener("click", function(){
@@ -196,15 +205,12 @@ async function fetchModal (){
 
 async function addWorkModal() {
     const modalDiv2 = document.querySelector(".modal2");
-
+    let modalDiv3 = document.querySelector(".modal3");
     document.addEventListener("click", async function (event) {
         if (event.target.classList.contains("add-photo-button")) {
             modalDiv2.style.display = "none";
-            const modalDiv3 = document.querySelector(".modal3");
-            modalDiv3.style.display = "flex";
-            
-            
-
+                   
+            modalDiv3.style.display = "flex"; 
             const navModal3 = document.createElement("nav");
             navModal3.innerHTML = '<i class="fa-solid fa-arrow-left"></i><i class="fa-solid fa-xmark"></i>';
             
@@ -212,6 +218,9 @@ async function addWorkModal() {
             document.addEventListener("click", function (event) {
             if (event.target.classList.contains("fa-xmark")) {
             modalDiv3.style.display = "none";
+            headerSection.style.filter = "blur(0)";
+            sectionIntroduction.style.filter = "blur(0)";
+            sectionPortfolio.style.filter = "blur(0)";
             }
             });
 
