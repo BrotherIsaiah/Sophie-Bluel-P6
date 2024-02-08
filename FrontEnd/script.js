@@ -125,7 +125,6 @@ function modalEditionAndLogout(){
         headerSection.style.filter = "blur(2px)";
         sectionIntroduction.style.filter = "blur(2px)";
         sectionPortfolio.style.filter = "blur(2px)";
-
     });
     const xCloseModal = document.querySelector(".fa-xmark");
     xCloseModal.addEventListener("click", function(){
@@ -205,13 +204,27 @@ async function fetchModal (){
 
 async function addWorkModal() {
     const modalDiv2 = document.querySelector(".modal2");
-    let modalDiv3 = document.querySelector(".modal3");
+    const modalDiv3 = document.querySelector(".modal3");
+    const navModal3 = document.createElement("nav");
+    const titleModal3 = document.createElement("h3");
+    const formWork = document.createElement("form");
+    const divImageInput = document.createElement("div");
+    const imageIcon = document.createElement("span");
+    const fileInputLabel = document.createElement("label");
+    const imageFileInput = document.createElement("input");
+    const previewImage = document.createElement("img");
+    const titleInput = document.createElement("input");
+    const titleText = document.createElement("p");
+    const reponseCategory = await fetch ("http://localhost:5678/api/categories");
+    const reponseJSCat = await reponseCategory.json();
+    const categoryInput = document.createElement("select");
+    const categoryText = document.createElement("p");
+    const submitButton = document.createElement("input");
+    const requestBody = new FormData();
     document.addEventListener("click", async function (event) {
         if (event.target.classList.contains("add-photo-button")) {
-            modalDiv2.style.display = "none";
-                   
+            modalDiv2.style.display = "none"; 
             modalDiv3.style.display = "flex"; 
-            const navModal3 = document.createElement("nav");
             navModal3.innerHTML = '<i class="fa-solid fa-arrow-left"></i><i class="fa-solid fa-xmark"></i>';
             
             // Utilisation de délégués d'événements pour le bouton de fermeture
@@ -221,7 +234,7 @@ async function addWorkModal() {
             headerSection.style.filter = "blur(0)";
             sectionIntroduction.style.filter = "blur(0)";
             sectionPortfolio.style.filter = "blur(0)";
-            }
+            };
             });
 
             // Utilisation de délégués d'événements pour le bouton précédent
@@ -231,31 +244,18 @@ async function addWorkModal() {
             modalDiv2.style.display = "flex";
             }
             });
-
-            const titleModal3 = document.createElement("h3");
             titleModal3.textContent = "Ajout photo";
-            
-
-            const formWork = document.createElement("form");
-
-            const divImageInput = document.createElement("div");
             divImageInput.classList.add = "image-input";
-
-            const imageIcon = document.createElement("span");
             imageIcon.innerHTML = '<i class="fa-regular fa-image"></i>';
             
-
-            const fileInputLabel = document.createElement("label");
             fileInputLabel.textContent = "Ajouter une photo";
             fileInputLabel.htmlFor = "fileInput";
 
-            const imageFileInput = document.createElement("input");
             imageFileInput.type = "file"; 
             imageFileInput.id = "fileInput";
             imageFileInput.accept = "jpg, png";
             imageFileInput.style.opacity = "0";
             
-            const previewImage = document.createElement("img");
             previewImage.style.maxWidth = "100%";
             previewImage.style.maxHeight = "150px";
 
@@ -275,18 +275,13 @@ async function addWorkModal() {
                 }
             });
             
-            const titleInput = document.createElement("input");
             titleInput.type = "text";
             titleInput.value = "";
 
-            const titleText = document.createElement("p");
             titleText.textContent = "Titre";
             
-            const reponseCategory = await fetch ("http://localhost:5678/api/categories");
-            console.log(reponseCategory);
-            const reponseJSCat = await reponseCategory.json();
-            console.log(reponseJSCat);
-            const categoryInput = document.createElement("select");
+            //console.log(reponseCategory);
+            //console.log(reponseJSCat);
             
             reponseJSCat.forEach((category) => {
                 const option = document.createElement("option");
@@ -295,21 +290,19 @@ async function addWorkModal() {
                 categoryInput.appendChild(option);
                 });
             
-            const categoryText = document.createElement("p");
+            
             categoryText.textContent = "Catégories";
 
-            const submitButton = document.createElement("input");
             submitButton.type = "submit";
             submitButton.value = "Valider";
             submitButton.style.backgroundColor = "#A7A7A7";
 
-            const requestBody = new FormData();
-                requestBody.append('image', imageFileInput.files[0]);
-                requestBody.append('title', titleInput.value);
-                requestBody.append('category', categoryInput.value);
-                console.log(requestBody);
+            requestBody.append('image', imageFileInput.files[0]);
+            requestBody.append('title', titleInput.value);
+            requestBody.append('category', categoryInput.value);
+            //console.log(requestBody);
 
-                formWork.appendChild(divImageInput);
+            formWork.appendChild(divImageInput);
             divImageInput.append(fileInputLabel);
             divImageInput.append(imageFileInput);
             divImageInput.appendChild(previewImage);
@@ -342,8 +335,6 @@ async function addWorkModal() {
                         },
                         body: requestBody
                     });
-            
-                    
                     if (createWorkBySubmit.ok){
                         console.log("Travail crée");
                         await fetchModal();
@@ -354,19 +345,17 @@ async function addWorkModal() {
                 } catch (error) {
                     console.log(error, "Impossible de créer")
                 }
-            }
-
+            };
             formWork.addEventListener("submit", async function (event) {
                 event.preventDefault();
                 await createWork();
             });
-            modalDiv3.appendChild(navModal3);
-            modalDiv3.appendChild(titleModal3);
-            modalDiv3.appendChild(formWork);
+            
         }
     });
-    
-        
+    modalDiv3.appendChild(navModal3);
+    modalDiv3.appendChild(titleModal3);
+    modalDiv3.appendChild(formWork);
     };
 
 fetchModal();

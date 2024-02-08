@@ -226,7 +226,7 @@ margin: auto;
 	display: none;
 	margin-inline: 28%;
 	justify-content: center;
-	background-color: blanchedalmond;
+	background-color: #f7f6f4;
 	width: 40%;
 	height: fit-content;
 	margin-block: 5%;
@@ -270,7 +270,7 @@ margin: auto;
 	  margin-inline: 28%;
 	  justify-content: center;
 	  height: fit-content;
-	  background-color:cadetblue;
+	  background-color:#f7f6f4;
 	  flex-direction: column;
 	  top: 30%;
 	}
