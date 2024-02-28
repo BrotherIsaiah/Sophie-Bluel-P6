@@ -130,6 +130,10 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
+.fa-pen-to-square{
+	cursor: pointer;
+}
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
@@ -150,6 +154,7 @@ li:hover {
 	color: #1D6154;
 	background-color: white;
 	margin-inline: 2%;
+	cursor: pointer;
 }
 #portfolio input[value="Tous"] {
     color: white;
@@ -255,11 +260,13 @@ margin: auto;
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
+	cursor: pointer;
 }
 .modal2 .fa-xmark{
 	display: flex;
 	justify-content: end;
 	font-size: x-large;
+	cursor: pointer;
 }
 
 .modal3 {
@@ -296,6 +303,7 @@ margin: auto;
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
   width: 60%;
+  cursor: pointer;
 	}
 	.modal3 select {
 		height: 50px;
@@ -316,11 +324,13 @@ margin: auto;
 		display: flex;
 		justify-content: end;
 		font-size: x-large;
+		cursor: pointer;
 	}
 	.modal3 .fa-arrow-left{
 		display: flex;
 		justify-content: start;
 		font-size: x-large;
+		cursor: pointer;
 	}
 	.modal3 .fa-image{
 		color: #B9C5CC;
@@ -391,6 +401,7 @@ margin: auto;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	cursor: pointer;
 }
 #login label {
 	margin: 2em 0 1em 0;
