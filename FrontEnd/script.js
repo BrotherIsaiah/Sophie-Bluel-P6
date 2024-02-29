@@ -4,7 +4,9 @@ const divCategory = document.createElement("div");
 const headerSection = document.querySelector("header");
 const sectionIntroduction = document.getElementById("introduction");
 const sectionPortfolio = document.getElementById("portfolio");
+let figureWork, imageWork;
 async function getWorkAndCategories() {
+  
   //console.log("test getWork");
   try {
     const reponseJSON = await fetch("http://localhost:5678/api/works");
@@ -18,8 +20,8 @@ async function getWorkAndCategories() {
 
     //Afficher les travaux
     reponseJS.forEach((work) => {
-      const figureWork = document.createElement("figure");
-      const imageWork = document.createElement("img");
+      figureWork = document.createElement("figure");
+      imageWork = document.createElement("img");
       imageWork.src = work.imageUrl;
       const titleWork = document.createElement("figcaption");
       titleWork.textContent = work.title;
@@ -142,56 +144,67 @@ function modalEditionAndLogout() {
 }
 modalEditionAndLogout();
 
-//Fonction de suppression de travaux
-async function deleteWork(work) {
-  try {
-    const token = getToken();
-    if (!token) {
-      throw new Error("Token d'authentification manquant");
-    }
-    const deleteWorkById = await fetch(
-      `http://localhost:5678/api/works/${work.id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Accept: "*/*",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (deleteWorkById.ok) {
-      console.log("Travail supprimé");
-      window.location.reload();
-    } else {
-      console.log("Erreur lors de la suppression");
-    }
-  } catch (error) {
-    console.log(error, "Impossible de supprimer");
-  }
-}
+
 //ajout des travaux dans fenetre modal
+
+
 async function fetchModal() {
+  let figureWork2, imageWork2;
+    //Fonction de suppression de travaux
+    async function deleteWork(work) {
+      try {
+        const token = getToken();
+        if (!token) {
+          throw new Error("Token d'authentification manquant");
+        }
+        const deleteWorkById = await fetch(
+          `http://localhost:5678/api/works/${work.id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Accept: "*/*",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        if (deleteWorkById.ok) {
+          console.log("Travail supprimé");
+          
+          if(figureWork2 && imageWork2){
+            figureWork2.remove();
+            imageWork2.remove();
+            figureWork.remove();
+            imageWork.remove();
+          };
+          
+        } else {
+          console.log("Erreur lors de la suppression");
+        }
+      } catch (error) {
+        console.log(error, "Impossible de supprimer");
+      };
+    };
   try {
     const reponseJSON = await fetch("http://localhost:5678/api/works");
     const reponseJS = await reponseJSON.json();
     const modalDiv2 = document.querySelector(".modal2");
     const modalGallery = document.querySelector(".modalGallery");
     reponseJS.forEach((work) => {
-      const figureWork = document.createElement("figure");
-      const imageWork = document.createElement("img");
-      imageWork.src = work.imageUrl;
+      figureWork2 = document.createElement("figure");
+      imageWork2 = document.createElement("img");
+      imageWork2.src = work.imageUrl;
       modalDiv2.appendChild(modalGallery);
-      modalGallery.appendChild(figureWork);
+      modalGallery.appendChild(figureWork2);
       modalGallery.style.display = "grid";
-      figureWork.style.display = "grid";
-      figureWork.appendChild(imageWork);
+      figureWork2.style.display = "grid";
+      figureWork2.appendChild(imageWork2);
       const trashButton = document.createElement("button");
       trashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
 
       trashButton.addEventListener("click", async function () {
         await deleteWork(work);
       });
-      figureWork.appendChild(trashButton);
+      figureWork2.appendChild(trashButton);
     });
     const addPhotoButton = document.createElement("input");
     addPhotoButton.setAttribute("type", "button");
@@ -200,8 +213,9 @@ async function fetchModal() {
     modalDiv2.appendChild(addPhotoButton);
   } catch (error) {
     console.log(error, "erreur pour la modale");
-  }
-}
+  };
+
+};
 //Formulaire pour ajout de travaux
 async function addWorkModal() {
   const modalDiv2 = document.querySelector(".modal2");
