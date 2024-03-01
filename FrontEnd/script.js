@@ -5,6 +5,7 @@ const headerSection = document.querySelector("header");
 const sectionIntroduction = document.getElementById("introduction");
 const sectionPortfolio = document.getElementById("portfolio");
 let figureWork, imageWork;
+const workElement = [];
 async function getWorkAndCategories() {
   
   //console.log("test getWork");
@@ -22,7 +23,9 @@ async function getWorkAndCategories() {
     reponseJS.forEach((work) => {
       figureWork = document.createElement("figure");
       imageWork = document.createElement("img");
+      figureWork.dataset.workId = work.id;
       imageWork.src = work.imageUrl;
+      console.log(figureWork);
       const titleWork = document.createElement("figcaption");
       titleWork.textContent = work.title;
       divGallery.appendChild(figureWork);
@@ -146,10 +149,11 @@ modalEditionAndLogout();
 
 
 //ajout des travaux dans fenetre modal
-
-
+const modalDiv2 = document.querySelector(".modal2");
+const modalGallery = document.querySelector(".modalGallery");
+let figureWork2, imageWork2;
 async function fetchModal() {
-  let figureWork2, imageWork2;
+  
     //Fonction de suppression de travaux
     async function deleteWork(work) {
       try {
@@ -170,16 +174,9 @@ async function fetchModal() {
         if (deleteWorkById.ok) {
           console.log("Travail supprimé");
           
-          if(figureWork2 && imageWork2){
-            figureWork2.remove();
-            imageWork2.remove();
-            figureWork.remove();
-            imageWork.remove();
-          };
-          
-        } else {
+      } else {
           console.log("Erreur lors de la suppression");
-        }
+      }
       } catch (error) {
         console.log(error, "Impossible de supprimer");
       };
@@ -187,8 +184,7 @@ async function fetchModal() {
   try {
     const reponseJSON = await fetch("http://localhost:5678/api/works");
     const reponseJS = await reponseJSON.json();
-    const modalDiv2 = document.querySelector(".modal2");
-    const modalGallery = document.querySelector(".modalGallery");
+    
     reponseJS.forEach((work) => {
       figureWork2 = document.createElement("figure");
       imageWork2 = document.createElement("img");
@@ -200,8 +196,7 @@ async function fetchModal() {
       figureWork2.appendChild(imageWork2);
       const trashButton = document.createElement("button");
       trashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
-
-      trashButton.addEventListener("click", async function () {
+      trashButton.addEventListener("click", async function (event) {
         await deleteWork(work);
       });
       figureWork2.appendChild(trashButton);
@@ -214,7 +209,6 @@ async function fetchModal() {
   } catch (error) {
     console.log(error, "erreur pour la modale");
   };
-
 };
 //Formulaire pour ajout de travaux
 async function addWorkModal() {
@@ -298,7 +292,7 @@ async function addWorkModal() {
 
       //console.log(reponseCategory);
       //console.log(reponseJSCat);
-
+      categoryInput.innerHTML = "";
       reponseJSCat.forEach((category) => {
         const option = document.createElement("option");
         option.value = category.id;
@@ -353,8 +347,28 @@ async function addWorkModal() {
           );
           if (createWorkBySubmit.ok) {
             console.log("Travail crée");
-            await fetchModal();
-            window.location.reload();
+             // Mettre à jour modalDiv2 pour afficher le nouveau travail
+             if(!figureWork2 && !imageWork2){
+              figureWork2 = document.createElement("figure");
+             console.log(figureWork2)
+              imageWork2 = document.createElement("img");
+              console.log(figureWork2)
+              imageWork2.src = imageFileInput.files[0].name;
+            modalDiv2.appendChild(modalGallery);
+            modalGallery.appendChild(figureWork2);
+            modalGallery.style.display = "grid";
+            figureWork2.style.display = "grid";
+            figureWork2.appendChild(imageWork2);
+            const trashButton = document.createElement("button");
+            trashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+
+            trashButton.addEventListener("click", async function () {
+            await deleteWork(work);
+            });
+            figureWork2.appendChild(trashButton);
+            };
+             
+
           } else {
             console.log("Erreur lors de la création");
           }
@@ -365,6 +379,13 @@ async function addWorkModal() {
       formWork.addEventListener("submit", async function (event) {
         event.preventDefault();
         await createWork();
+        modalDiv2.style.display = "flex";
+        modalDiv3.style.display = "none";
+        titleInput.value = ""; // Réinitialiser la valeur du champ de titre
+        imageFileInput.value = ""; // Effacer le fichier sélectionné
+        previewImage.src = ""; // Effacer l'aperçu de l'image sélectionnée
+        categoryInput.value = "";
+
       });
     }
   });
