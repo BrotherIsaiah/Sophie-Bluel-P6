@@ -7,7 +7,6 @@ const sectionPortfolio = document.getElementById("portfolio");
 let figureWork, imageWork;
 const workElement = [];
 async function getWorkAndCategories() {
-  
   //console.log("test getWork");
   try {
     const reponseJSON = await fetch("http://localhost:5678/api/works");
@@ -122,7 +121,7 @@ function modalEditionAndLogout() {
   }
   //Premiere modal d'ajout/suppression de travaux
   const modalDiv2 = document.querySelector(".modal2");
-  
+
   icon.addEventListener("click", function () {
     modalDiv2.style.display = "grid";
     headerSection.style.filter = "blur(2px)";
@@ -147,44 +146,42 @@ function modalEditionAndLogout() {
 }
 modalEditionAndLogout();
 
-
 //ajout des travaux dans fenetre modal
 const modalDiv2 = document.querySelector(".modal2");
 const modalGallery = document.querySelector(".modalGallery");
 let figureWork2, imageWork2;
-async function fetchModal() {
-  
-    //Fonction de suppression de travaux
-    async function deleteWork(work) {
-      try {
-        const token = getToken();
-        if (!token) {
-          throw new Error("Token d'authentification manquant");
-        }
-        const deleteWorkById = await fetch(
-          `http://localhost:5678/api/works/${work.id}`,
-          {
-            method: "DELETE",
-            headers: {
-              Accept: "*/*",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        if (deleteWorkById.ok) {
-          console.log("Travail supprimé");
-          
-      } else {
-          console.log("Erreur lors de la suppression");
+async function deleteWork(work) {
+  try {
+    const token = getToken();
+    if (!token) {
+      throw new Error("Token d'authentification manquant");
+    }
+    const deleteWorkById = await fetch(
+      `http://localhost:5678/api/works/${work.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
       }
-      } catch (error) {
-        console.log(error, "Impossible de supprimer");
-      };
-    };
+    );
+    if (deleteWorkById.ok) {
+      console.log("Travail supprimé");
+    } else {
+      console.log("Erreur lors de la suppression");
+    }
+  } catch (error) {
+    console.log(error, "Impossible de supprimer");
+  }
+}
+async function fetchModal() {
+  //Fonction de suppression de travaux
+  
   try {
     const reponseJSON = await fetch("http://localhost:5678/api/works");
     const reponseJS = await reponseJSON.json();
-    
+
     reponseJS.forEach((work) => {
       figureWork2 = document.createElement("figure");
       imageWork2 = document.createElement("img");
@@ -202,8 +199,10 @@ async function fetchModal() {
         const workId = event.target.closest("figure").dataset.workId;
         await deleteWork({ id: workId });
         figureToDelete.remove();
-        const figureToDeleteMain = document.querySelector(`figure[data-work-id="${workId}"]`);
-        if(figureToDeleteMain){
+        const figureToDeleteMain = document.querySelector(
+          `figure[data-work-id="${workId}"]`
+        );
+        if (figureToDeleteMain) {
           figureToDeleteMain.remove();
         }
       });
@@ -216,8 +215,8 @@ async function fetchModal() {
     modalDiv2.appendChild(addPhotoButton);
   } catch (error) {
     console.log(error, "erreur pour la modale");
-  };
-};
+  }
+}
 //Formulaire pour ajout de travaux
 async function addWorkModal() {
   const modalDiv2 = document.querySelector(".modal2");
@@ -276,7 +275,7 @@ async function addWorkModal() {
 
       previewImage.style.maxWidth = "100%";
       previewImage.style.maxHeight = "150px";
-
+      
       imageFileInput.addEventListener("change", () => {
         const file = imageFileInput.files[0];
         if (file) {
@@ -357,11 +356,22 @@ async function addWorkModal() {
             console.log("Travail crée");
             // Mettre à jour modalDiv2 pour afficher le nouveau travail
             const newWork = await createWorkBySubmit.json();
+            const newtrashButton = document.createElement("button");
+            newtrashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+            // Ajouter un gestionnaire d'événements pour le bouton de suppression
+            newtrashButton.addEventListener("click", async function () {
+              // Appeler la fonction deleteWork avec l'ID du travail à supprimer
+              await deleteWork({ id: newWork.id });
+              // Supprimer l'élément correspondant du DOM
+              newFigureModal.remove();
+              newFigureHome.remove();
+            });
             const modalGallery2 = document.querySelector(".modalGallery");
             const divGallery = document.querySelector(".gallery");
             const newFigureModal = document.createElement("figure");
             const newImageModal = document.createElement("img");
             newImageModal.src = newWork.imageUrl;
+            newFigureModal.appendChild(newtrashButton);
             newFigureModal.appendChild(newImageModal);
             modalGallery2.appendChild(newFigureModal);
 
@@ -386,14 +396,13 @@ async function addWorkModal() {
         imageFileInput.value = ""; // Effacer le fichier sélectionné
         previewImage.src = ""; // Effacer l'aperçu de l'image sélectionnée
         categoryInput.value = "";
-        
       });
     }
   });
   modalDiv3.appendChild(navModal3);
   modalDiv3.appendChild(titleModal3);
   modalDiv3.appendChild(formWork);
-};
+}
 
 fetchModal();
 addWorkModal();

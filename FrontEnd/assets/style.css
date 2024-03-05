@@ -229,14 +229,13 @@ margin: auto;
 	position: absolute;
 	width: 40%;
 	display: none;
-	margin-inline: 28%;
 	justify-content: center;
 	background-color: #f7f6f4;
-	width: 40%;
 	height: fit-content;
 	margin-block: 5%;
 	padding: 2%;
 	flex-direction: column;
+	left: 30%;
 }
 .modal2 p {
 	font-size: x-large;
