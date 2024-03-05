@@ -201,7 +201,11 @@ async function fetchModal() {
         const figureToDelete = event.currentTarget.closest("figure");
         const workId = event.target.closest("figure").dataset.workId;
         await deleteWork({ id: workId });
-        figureToDelete.remove({ id: workId });
+        figureToDelete.remove();
+        const figureToDeleteMain = document.querySelector(`figure[data-work-id="${workId}"]`);
+        if(figureToDeleteMain){
+          figureToDeleteMain.remove();
+        }
       });
       figureWork2.appendChild(trashButton);
     });
