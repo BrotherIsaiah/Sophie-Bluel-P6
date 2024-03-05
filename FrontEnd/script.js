@@ -355,13 +355,15 @@ async function addWorkModal() {
           );
           if (createWorkBySubmit.ok) {
             console.log("Travail crée");
-             // Mettre à jour modalDiv2 pour afficher le nouveau travail
+            // Mettre à jour modalDiv2 pour afficher le nouveau travail
             const newWork = await createWorkBySubmit.json();
+            const modalGallery2 = document.querySelector(".modalGallery");
             const divGallery = document.querySelector(".gallery");
             const newFigureModal = document.createElement("figure");
             const newImageModal = document.createElement("img");
+            newImageModal.src = newWork.imageUrl;
             newFigureModal.appendChild(newImageModal);
-            modalGallery.appendChild(newFigureModal);
+            modalGallery2.appendChild(newFigureModal);
 
             const newFigureHome = document.createElement("figure");
             const newImageHome = document.createElement("img");
