@@ -188,6 +188,7 @@ async function fetchModal() {
     reponseJS.forEach((work) => {
       figureWork2 = document.createElement("figure");
       imageWork2 = document.createElement("img");
+      figureWork2.dataset.workId = work.id;
       imageWork2.src = work.imageUrl;
       modalDiv2.appendChild(modalGallery);
       modalGallery.appendChild(figureWork2);
@@ -197,7 +198,10 @@ async function fetchModal() {
       const trashButton = document.createElement("button");
       trashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
       trashButton.addEventListener("click", async function (event) {
-        await deleteWork(work);
+        const figureToDelete = event.currentTarget.closest("figure");
+        const workId = event.target.closest("figure").dataset.workId;
+        await deleteWork({ id: workId });
+        figureToDelete.remove({ id: workId });
       });
       figureWork2.appendChild(trashButton);
     });
