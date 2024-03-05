@@ -330,8 +330,17 @@ async function addWorkModal() {
       formWork.appendChild(categoryInput);
       formWork.appendChild(submitButton);
       //appel pour ajouter un travail
+      
+      const newtrashButton = document.createElement("button");
+      const newFigureHome = document.createElement("figure");
+      const newImageHome = document.createElement("img");
+      const modalGallery2 = document.querySelector(".modalGallery");
+      const divGallery = document.querySelector(".gallery");
+      const newFigureModal = document.createElement("figure");
+      const newImageModal = document.createElement("img");
+
       async function createWork(work) {
-        try {
+        try {  
           const token = await getToken();
           if (!token) {
             throw new Error("Token d'authentification manquant");
@@ -354,9 +363,8 @@ async function addWorkModal() {
           );
           if (createWorkBySubmit.ok) {
             console.log("Travail crée");
-            // Mettre à jour modalDiv2 pour afficher le nouveau travail
+            
             const newWork = await createWorkBySubmit.json();
-            const newtrashButton = document.createElement("button");
             newtrashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
             // Ajouter un gestionnaire d'événements pour le bouton de suppression
             newtrashButton.addEventListener("click", async function () {
@@ -366,17 +374,12 @@ async function addWorkModal() {
               newFigureModal.remove();
               newFigureHome.remove();
             });
-            const modalGallery2 = document.querySelector(".modalGallery");
-            const divGallery = document.querySelector(".gallery");
-            const newFigureModal = document.createElement("figure");
-            const newImageModal = document.createElement("img");
+            
             newImageModal.src = newWork.imageUrl;
             newFigureModal.appendChild(newtrashButton);
             newFigureModal.appendChild(newImageModal);
             modalGallery2.appendChild(newFigureModal);
 
-            const newFigureHome = document.createElement("figure");
-            const newImageHome = document.createElement("img");
             newImageHome.src = newWork.imageUrl;
             newFigureHome.appendChild(newImageHome);
             divGallery.appendChild(newFigureHome);
