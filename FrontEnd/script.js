@@ -122,7 +122,7 @@ function modalEditionAndLogout() {
   }
   //Premiere modal d'ajout/suppression de travaux
   const modalDiv2 = document.querySelector(".modal2");
-  const modalGallery = document.querySelector(".modalGallery");
+  
   icon.addEventListener("click", function () {
     modalDiv2.style.display = "grid";
     headerSection.style.filter = "blur(2px)";
@@ -356,27 +356,18 @@ async function addWorkModal() {
           if (createWorkBySubmit.ok) {
             console.log("Travail crée");
              // Mettre à jour modalDiv2 pour afficher le nouveau travail
-             if(!figureWork2 && !imageWork2){
-              figureWork2 = document.createElement("figure");
-             console.log(figureWork2)
-              imageWork2 = document.createElement("img");
-              console.log(figureWork2)
-              imageWork2.src = imageFileInput.files[0].name;
-            modalDiv2.appendChild(modalGallery);
-            modalGallery.appendChild(figureWork2);
-            modalGallery.style.display = "grid";
-            figureWork2.style.display = "grid";
-            figureWork2.appendChild(imageWork2);
-            const trashButton = document.createElement("button");
-            trashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+            const newWork = await createWorkBySubmit.json();
+            const divGallery = document.querySelector(".gallery");
+            const newFigureModal = document.createElement("figure");
+            const newImageModal = document.createElement("img");
+            newFigureModal.appendChild(newImageModal);
+            modalGallery.appendChild(newFigureModal);
 
-            trashButton.addEventListener("click", async function () {
-            await deleteWork(work);
-            });
-            figureWork2.appendChild(trashButton);
-            };
-             
-
+            const newFigureHome = document.createElement("figure");
+            const newImageHome = document.createElement("img");
+            newImageHome.src = newWork.imageUrl;
+            newFigureHome.appendChild(newImageHome);
+            divGallery.appendChild(newFigureHome);
           } else {
             console.log("Erreur lors de la création");
           }
@@ -393,7 +384,7 @@ async function addWorkModal() {
         imageFileInput.value = ""; // Effacer le fichier sélectionné
         previewImage.src = ""; // Effacer l'aperçu de l'image sélectionnée
         categoryInput.value = "";
-
+        
       });
     }
   });
