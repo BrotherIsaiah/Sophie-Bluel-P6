@@ -177,7 +177,7 @@ async function deleteWork(work) {
 }
 async function fetchModal() {
   //Fonction de suppression de travaux
-  
+
   try {
     const reponseJSON = await fetch("http://localhost:5678/api/works");
     const reponseJS = await reponseJSON.json();
@@ -217,26 +217,94 @@ async function fetchModal() {
     console.log(error, "erreur pour la modale");
   }
 }
+//const modalDiv2 = document.querySelector(".modal2");
+const modalDiv3 = document.querySelector(".modal3");
+const navModal3 = document.createElement("nav");
+const titleModal3 = document.createElement("h3");
+const formWork = document.createElement("form");
+const divImageInput = document.createElement("div");
+const imageIcon = document.createElement("span");
+imageIcon.innerHTML = '<i class="fa-regular fa-image"></i>';
+//console.log(imageIcon);
+const fileInputLabel = document.createElement("label");
+const imageFileInput = document.createElement("input");
+const previewImage = document.createElement("img");
+const titleInput = document.createElement("input");
+const titleText = document.createElement("p");
+const reponseCategory = await fetch("http://localhost:5678/api/categories");
+const reponseJSCat = await reponseCategory.json();
+const categoryInput = document.createElement("select");
+const categoryText = document.createElement("p");
+const submitButton = document.createElement("input");
+const requestBody = new FormData();
+const newtrashButton = document.createElement("button");
+const newFigureHome = document.createElement("figure");
+const newImageHome = document.createElement("img");
+const modalGallery2 = document.querySelector(".modalGallery");
+const divGallery = document.querySelector(".gallery");
+const newFigureModal = document.createElement("figure");
+const newImageModal = document.createElement("img");
+
+async function createWork(work) {
+  try {
+    const token = await getToken();
+    if (!token) {
+      throw new Error("Token d'authentification manquant");
+    }
+
+    const requestBody = new FormData();
+    requestBody.append("image", imageFileInput.files[0]);
+    requestBody.append("title", titleInput.value);
+    requestBody.append("category", categoryInput.value);
+
+    const createWorkBySubmit = await fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: requestBody,
+    });
+    if (createWorkBySubmit.ok) {
+      console.log("Travail crée");
+      //Création de nouveaux éléments
+      const newWork = await createWorkBySubmit.json();
+      newtrashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+      newtrashButton.addEventListener("click", async function () {
+        // Appeler la fonction deleteWork avec l'ID du travail à supprimer
+        await deleteWork({ id: newWork.id });
+        newFigureModal.remove();
+        newFigureHome.remove();
+      });
+
+      newImageModal.src = newWork.imageUrl;
+      newFigureModal.appendChild(newtrashButton);
+      newFigureModal.appendChild(newImageModal);
+      modalGallery2.appendChild(newFigureModal);
+
+      newImageHome.src = newWork.imageUrl;
+      newFigureHome.appendChild(newImageHome);
+      divGallery.appendChild(newFigureHome);
+    } else {
+      console.log("Erreur lors de la création");
+    }
+  } catch (error) {
+    console.log(error, "Impossible de créer");
+  }
+}
+formWork.addEventListener("submit", async function (event) {
+  console.log("enter in form");
+  event.preventDefault();
+  await createWork();
+  modalDiv2.style.display = "flex";
+  modalDiv3.style.display = "none";
+  titleInput.value = ""; // Réinitialiser la valeur du champ de titre
+  imageFileInput.value = ""; // Effacer le fichier sélectionné
+  previewImage.src = ""; // Effacer l'aperçu de l'image sélectionnée
+  categoryInput.value = "";
+  imageIcon.innerHTML = '<i class="fa-regular fa-image"></i>';
+});
 //Formulaire pour ajout de travaux
 async function addWorkModal() {
-  const modalDiv2 = document.querySelector(".modal2");
-  const modalDiv3 = document.querySelector(".modal3");
-  const navModal3 = document.createElement("nav");
-  const titleModal3 = document.createElement("h3");
-  const formWork = document.createElement("form");
-  const divImageInput = document.createElement("div");
-  const imageIcon = document.createElement("span");
-  const fileInputLabel = document.createElement("label");
-  const imageFileInput = document.createElement("input");
-  const previewImage = document.createElement("img");
-  const titleInput = document.createElement("input");
-  const titleText = document.createElement("p");
-  const reponseCategory = await fetch("http://localhost:5678/api/categories");
-  const reponseJSCat = await reponseCategory.json();
-  const categoryInput = document.createElement("select");
-  const categoryText = document.createElement("p");
-  const submitButton = document.createElement("input");
-  const requestBody = new FormData();
   document.addEventListener("click", async function (event) {
     if (event.target.classList.contains("add-photo-button")) {
       modalDiv2.style.display = "none";
@@ -251,6 +319,11 @@ async function addWorkModal() {
           headerSection.style.filter = "blur(0)";
           sectionIntroduction.style.filter = "blur(0)";
           sectionPortfolio.style.filter = "blur(0)";
+          titleInput.value = ""; // Réinitialiser la valeur du champ de titre
+          imageFileInput.value = ""; // Effacer le fichier sélectionné
+          previewImage.src = ""; // Effacer l'aperçu de l'image sélectionnée
+          categoryInput.value = "";
+          imageIcon.innerHTML = '<i class="fa-regular fa-image"></i>';
         }
       });
 
@@ -259,11 +332,15 @@ async function addWorkModal() {
         if (event.target.classList.contains("fa-arrow-left")) {
           modalDiv3.style.display = "none";
           modalDiv2.style.display = "flex";
+          titleInput.value = ""; // Réinitialiser la valeur du champ de titre
+          imageFileInput.value = ""; // Effacer le fichier sélectionné
+          previewImage.src = ""; // Effacer l'aperçu de l'image sélectionnée
+          categoryInput.value = "";
+          imageIcon.innerHTML = '<i class="fa-regular fa-image"></i>';
         }
       });
       titleModal3.textContent = "Ajout photo";
       divImageInput.classList.add = "image-input";
-      imageIcon.innerHTML = '<i class="fa-regular fa-image"></i>';
 
       fileInputLabel.textContent = "Ajouter une photo";
       fileInputLabel.htmlFor = "fileInput";
@@ -275,19 +352,20 @@ async function addWorkModal() {
 
       previewImage.style.maxWidth = "100%";
       previewImage.style.maxHeight = "150px";
-      
+
       imageFileInput.addEventListener("change", () => {
         const file = imageFileInput.files[0];
         if (file) {
           const reader = new FileReader();
           imageFileInput.style.flexDirection = "column-reverse";
-          imageIcon.style.display = "none";
+          imageIcon.innerHTML = "";
           submitButton.style.backgroundColor = "#1D6154";
           reader.onload = (e) => {
             previewImage.src = e.target.result;
           };
           reader.readAsDataURL(file);
         } else {
+          imageIcon.innerHTML = '<i class="fa-regular fa-image"></i>';
           previewImage.src = "";
         }
       });
@@ -330,76 +408,6 @@ async function addWorkModal() {
       formWork.appendChild(categoryInput);
       formWork.appendChild(submitButton);
       //appel pour ajouter un travail
-      
-      const newtrashButton = document.createElement("button");
-      const newFigureHome = document.createElement("figure");
-      const newImageHome = document.createElement("img");
-      const modalGallery2 = document.querySelector(".modalGallery");
-      const divGallery = document.querySelector(".gallery");
-      const newFigureModal = document.createElement("figure");
-      const newImageModal = document.createElement("img");
-
-      async function createWork(work) {
-        try {  
-          const token = await getToken();
-          if (!token) {
-            throw new Error("Token d'authentification manquant");
-          }
-
-          const requestBody = new FormData();
-          requestBody.append("image", imageFileInput.files[0]);
-          requestBody.append("title", titleInput.value);
-          requestBody.append("category", categoryInput.value);
-
-          const createWorkBySubmit = await fetch(
-            "http://localhost:5678/api/works",
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              body: requestBody,
-            }
-          );
-          if (createWorkBySubmit.ok) {
-            console.log("Travail crée");
-            
-            const newWork = await createWorkBySubmit.json();
-            newtrashButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
-            // Ajouter un gestionnaire d'événements pour le bouton de suppression
-            newtrashButton.addEventListener("click", async function () {
-              // Appeler la fonction deleteWork avec l'ID du travail à supprimer
-              await deleteWork({ id: newWork.id });
-              // Supprimer l'élément correspondant du DOM
-              newFigureModal.remove();
-              newFigureHome.remove();
-            });
-            
-            newImageModal.src = newWork.imageUrl;
-            newFigureModal.appendChild(newtrashButton);
-            newFigureModal.appendChild(newImageModal);
-            modalGallery2.appendChild(newFigureModal);
-
-            newImageHome.src = newWork.imageUrl;
-            newFigureHome.appendChild(newImageHome);
-            divGallery.appendChild(newFigureHome);
-          } else {
-            console.log("Erreur lors de la création");
-          }
-        } catch (error) {
-          console.log(error, "Impossible de créer");
-        }
-      }
-      formWork.addEventListener("submit", async function (event) {
-        event.preventDefault();
-        await createWork();
-        modalDiv2.style.display = "flex";
-        modalDiv3.style.display = "none";
-        titleInput.value = ""; // Réinitialiser la valeur du champ de titre
-        imageFileInput.value = ""; // Effacer le fichier sélectionné
-        previewImage.src = ""; // Effacer l'aperçu de l'image sélectionnée
-        categoryInput.value = "";
-      });
     }
   });
   modalDiv3.appendChild(navModal3);
